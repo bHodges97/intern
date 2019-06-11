@@ -5,7 +5,8 @@ config.xml is the dashboard config, it goes in the jenkins install directory
 jobs/config.xml is the job (build/test) config file, it goes in the project folder in the jenkins job directory.
 
 Jenkins plugins needed:
-Dashboard view
-Performance plugin
-Plot plugin
-XUnit plugin
+
+* Dashboard view
+* Performance plugin
+* Plot plugin
+* XUnit plugin
