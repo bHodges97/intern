@@ -22,5 +22,5 @@ done
 
 FILE=benchmark_ior.csv
 rm -f $FILE
-echo $TITLES | cut -b3- # >> $FILE
-echo $VALUES | cut -b3- #>> $FILE
+echo $TITLES | cut -b3- >> $FILE
+echo $VALUES | cut -b3- >> $FILE
