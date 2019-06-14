@@ -1,158 +1,187 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.10.0">
-    <configVersion>2</configVersion>
-    <userRemoteConfigs>
-      <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/ESiWACE/esdm</url>
-      </hudson.plugins.git.UserRemoteConfig>
-    </userRemoteConfigs>
-    <branches>
-      <hudson.plugins.git.BranchSpec>
-        <name>*/master</name>
-      </hudson.plugins.git.BranchSpec>
-    </branches>
-    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-    <submoduleCfg class="list"/>
-    <extensions/>
-  </scm>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <authToken>test</authToken>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <hudson.tasks.Shell>
-      <command>cd deps
-rm -rf ./smd
-./prepare.sh
-cd ..
-./configure --prefix=$PWD/install --debug
-cd build
-make -j 4
-make install
-ctest --force-new-ctest-process --no-compress-output -T Test || /bin/true
-./benchmarkstats.sh</command>
-    </hudson.tasks.Shell>
-  </builders>
-  <publishers>
-    <xunit plugin="xunit@2.3.4">
-      <types>
-        <CTestType>
-          <pattern>build/Testing/**/Test.xml</pattern>
-          <skipNoTestFiles>false</skipNoTestFiles>
-          <failIfNotNew>false</failIfNotNew>
-          <deleteOutputFiles>false</deleteOutputFiles>
-          <stopProcessingIfError>true</stopProcessingIfError>
-        </CTestType>
-      </types>
-      <thresholds/>
-      <thresholdMode>1</thresholdMode>
-      <extraConfiguration>
-        <testTimeMargin>3000</testTimeMargin>
-        <reduceLog>true</reduceLog>
-      </extraConfiguration>
-      <testDataPublishers class="empty-set"/>
-    </xunit>
-    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
-      <tasks>
-        <hudson.plugins.postbuildtask.TaskProperties>
-          <logTexts>
-            <hudson.plugins.postbuildtask.LogProperties>
-              <logText></logText>
-              <operator>AND</operator>
-            </hudson.plugins.postbuildtask.LogProperties>
-          </logTexts>
-          <EscalateStatus>false</EscalateStatus>
-          <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>mv generatedJUnitFiles/**/CTest/*.xml Test.xml</script>
-        </hudson.plugins.postbuildtask.TaskProperties>
-      </tasks>
-    </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.performance.PerformancePublisher plugin="performance@3.16">
-      <errorFailedThreshold>-1</errorFailedThreshold>
-      <errorUnstableThreshold>-1</errorUnstableThreshold>
-      <errorUnstableResponseTimeThreshold></errorUnstableResponseTimeThreshold>
-      <relativeFailedThresholdPositive>-1.0</relativeFailedThresholdPositive>
-      <relativeFailedThresholdNegative>-1.0</relativeFailedThresholdNegative>
-      <relativeUnstableThresholdPositive>-1.0</relativeUnstableThresholdPositive>
-      <relativeUnstableThresholdNegative>-1.0</relativeUnstableThresholdNegative>
-      <nthBuildNumber>0</nthBuildNumber>
-      <configType>ART</configType>
-      <graphType>ART</graphType>
-      <modeOfThreshold>false</modeOfThreshold>
-      <failBuildIfNoResultFile>true</failBuildIfNoResultFile>
-      <compareBuildPrevious>false</compareBuildPrevious>
-      <optionType>ART</optionType>
-      <modePerformancePerTestCase>false</modePerformancePerTestCase>
-      <excludeResponseTime>false</excludeResponseTime>
-      <modeThroughput>false</modeThroughput>
-      <modeEvaluation>false</modeEvaluation>
-      <constraints class="empty-list"/>
-      <ignoreFailedBuilds>false</ignoreFailedBuilds>
-      <ignoreUnstableBuilds>false</ignoreUnstableBuilds>
-      <persistConstraintLog>false</persistConstraintLog>
-      <sourceDataFiles>Test.xml</sourceDataFiles>
-      <filterRegex></filterRegex>
-      <junitOutput></junitOutput>
-      <percentiles>0,50,90,100</percentiles>
-      <baselineBuild>0</baselineBuild>
-    </hudson.plugins.performance.PerformancePublisher>
-    <hudson.plugins.plot.PlotPublisher plugin="plot@2.1.0">
-      <plots>
-        <hudson.plugins.plot.Plot>
-          <title>Performance </title>
-          <yaxis>mb/s</yaxis>
-          <series>
-            <hudson.plugins.plot.CSVSeries>
-              <file>build/benchmarkdb.csv</file>
-              <label></label>
-              <fileType>csv</fileType>
-              <inclusionFlag>OFF</inclusionFlag>
-              <exclusionValues></exclusionValues>
-              <url></url>
-              <displayTableFlag>false</displayTableFlag>
-            </hudson.plugins.plot.CSVSeries>
-          </series>
-          <group>io</group>
-          <numBuilds></numBuilds>
-          <csvFileName>plot-2128819933502379747.csv</csvFileName>
-          <csvLastModification>0</csvLastModification>
-          <style>line</style>
-          <useDescr>false</useDescr>
-          <keepRecords>false</keepRecords>
-          <exclZero>false</exclZero>
-          <logarithmic>false</logarithmic>
-          <yaxisMinimum></yaxisMinimum>
-          <yaxisMaximum></yaxisMaximum>
-        </hudson.plugins.plot.Plot>
-      </plots>
-    </hudson.plugins.plot.PlotPublisher>
-    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.37">
-      <patterns>
-        <hudson.plugins.ws__cleanup.Pattern>
-          <pattern>generatedJUnitFiles</pattern>
-          <type>INCLUDE</type>
-        </hudson.plugins.ws__cleanup.Pattern>
-      </patterns>
-      <deleteDirs>true</deleteDirs>
-      <skipWhenFailed>false</skipWhenFailed>
-      <cleanWhenSuccess>true</cleanWhenSuccess>
-      <cleanWhenUnstable>true</cleanWhenUnstable>
-      <cleanWhenFailure>true</cleanWhenFailure>
-      <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
-      <cleanWhenAborted>true</cleanWhenAborted>
-      <notFailBuild>false</notFailBuild>
-      <cleanupMatrixParent>false</cleanupMatrixParent>
-      <externalDelete></externalDelete>
-      <disableDeferredWipeout>false</disableDeferredWipeout>
-    </hudson.plugins.ws__cleanup.WsCleanup>
-  </publishers>
-  <buildWrappers/>
-</project>
+<hudson>
+  <disabledAdministrativeMonitors>
+    <string>jenkins.security.s2m.MasterKillSwitchWarning</string>
+  </disabledAdministrativeMonitors>
+  <version>2.180</version>
+  <installStateName>RUNNING</installStateName>
+  <numExecutors>2</numExecutors>
+  <mode>NORMAL</mode>
+  <useSecurity>true</useSecurity>
+  <authorizationStrategy class="hudson.security.AuthorizationStrategy$Unsecured"/>
+  <securityRealm class="hudson.security.HudsonPrivateSecurityRealm">
+    <disableSignup>true</disableSignup>
+    <enableCaptcha>false</enableCaptcha>
+  </securityRealm>
+  <disableRememberMe>false</disableRememberMe>
+  <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
+  <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULL_NAME}</workspaceDir>
+  <buildsDir>${ITEM_ROOTDIR}/builds</buildsDir>
+  <markupFormatter class="hudson.markup.EscapedMarkupFormatter"/>
+  <jdks/>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds/>
+  <quietPeriod>5</quietPeriod>
+  <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
+  <views>
+    <hudson.model.AllView>
+      <owner class="hudson" reference="../../.."/>
+      <name>all</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+    </hudson.model.AllView>
+    <hudson.plugins.view.dashboard.Dashboard plugin="dashboard-view@2.10">
+      <owner class="hudson" reference="../../.."/>
+      <name>esdm</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>esdm</string>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <recurse>false</recurse>
+      <useCssStyle>false</useCssStyle>
+      <includeStdJobList>true</includeStdJobList>
+      <hideJenkinsPanels>false</hideJenkinsPanels>
+      <leftPortletWidth>50%</leftPortletWidth>
+      <rightPortletWidth>50%</rightPortletWidth>
+      <leftPortlets>
+        <hudson.plugins.view.dashboard.core.IframePortlet>
+          <id>dashboard_portlet_20453</id>
+          <name>responce time graph</name>
+          <iframeSource>http://localhost:8081/view/esdm/job/esdm/performance/respondingTimeGraph</iframeSource>
+          <effectiveUrl>http://localhost:8081/view/esdm/job/esdm/performance/respondingTimeGraph</effectiveUrl>
+          <divStyle>width:100%;height:250px;</divStyle>
+        </hudson.plugins.view.dashboard.core.IframePortlet>
+        <hudson.plugins.view.dashboard.core.IframePortlet>
+          <id>dashboard_portlet_7313</id>
+          <name>Iframe Portlet</name>
+          <iframeSource>http://localhost:8081/view/esdm/job/esdm/performance/errorsGraph</iframeSource>
+          <effectiveUrl>http://localhost:8081/view/esdm/job/esdm/performance/errorsGraph</effectiveUrl>
+          <divStyle>width:100%;height:250px;</divStyle>
+        </hudson.plugins.view.dashboard.core.IframePortlet>
+      </leftPortlets>
+      <rightPortlets>
+        <hudson.plugins.view.dashboard.test.TestStatisticsChart>
+          <id>dashboard_portlet_18415</id>
+          <name>Test Statistics Chart</name>
+        </hudson.plugins.view.dashboard.test.TestStatisticsChart>
+        <hudson.plugins.view.dashboard.stats.StatBuilds>
+          <id>dashboard_portlet_20219</id>
+          <name>Build statistics</name>
+        </hudson.plugins.view.dashboard.stats.StatBuilds>
+      </rightPortlets>
+      <topPortlets/>
+      <bottomPortlets>
+        <hudson.plugins.view.dashboard.core.IframePortlet>
+          <id>dashboard_portlet_17311</id>
+          <name>Iframe Portlet</name>
+          <iframeSource>http://localhost:8081/job/esdm/plot/getPlot?index=0&amp;width=750&amp;height=450</iframeSource>
+          <effectiveUrl>http://localhost:8081/job/esdm/plot/getPlot?index=0&amp;width=750&amp;height=450</effectiveUrl>
+          <divStyle>width:750px;height:500px;</divStyle>
+        </hudson.plugins.view.dashboard.core.IframePortlet>
+        <hudson.plugins.view.dashboard.test.TestTrendChart>
+          <id>dashboard_portlet_18209</id>
+          <name>Test Trend Chart</name>
+          <graphWidth>300</graphWidth>
+          <graphHeight>220</graphHeight>
+          <dateRange>0</dateRange>
+          <dateShift>0</dateShift>
+          <displayStatus>ALL</displayStatus>
+        </hudson.plugins.view.dashboard.test.TestTrendChart>
+      </bottomPortlets>
+    </hudson.plugins.view.dashboard.Dashboard>
+    <hudson.plugins.view.dashboard.Dashboard plugin="dashboard-view@2.10">
+      <owner class="hudson" reference="../../.."/>
+      <name>ior</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        <string>ior</string>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <recurse>false</recurse>
+      <useCssStyle>false</useCssStyle>
+      <includeStdJobList>false</includeStdJobList>
+      <hideJenkinsPanels>false</hideJenkinsPanels>
+      <leftPortletWidth>50%</leftPortletWidth>
+      <rightPortletWidth>50%</rightPortletWidth>
+      <leftPortlets/>
+      <rightPortlets/>
+      <topPortlets>
+        <hudson.plugins.view.dashboard.core.JobsPortlet>
+          <id>dashboard_portlet_3376</id>
+          <name>Jobs Grid</name>
+          <columnCount>3</columnCount>
+          <fillColumnFirst>false</fillColumnFirst>
+        </hudson.plugins.view.dashboard.core.JobsPortlet>
+        <hudson.plugins.view.dashboard.core.IframePortlet>
+          <id>dashboard_portlet_29282</id>
+          <name>Iframe Portlet</name>
+          <iframeSource>http://localhost:8081/job/ior/plot/ior/getPlot?index=0&amp;width=750&amp;height=450</iframeSource>
+          <effectiveUrl>http://localhost:8081/job/ior/plot/ior/getPlot?index=0&amp;width=750&amp;height=450</effectiveUrl>
+          <divStyle>width:750;height:500px;</divStyle>
+        </hudson.plugins.view.dashboard.core.IframePortlet>
+        <hudson.plugins.view.dashboard.core.IframePortlet>
+          <id>dashboard_portlet_13837</id>
+          <name>Iframe Portlet</name>
+          <iframeSource>http://localhost:8081/job/ior/plot/mdtest/getPlot?index=0&amp;width=750&amp;height=450</iframeSource>
+          <effectiveUrl>http://localhost:8081/job/ior/plot/mdtest/getPlot?index=0&amp;width=750&amp;height=450</effectiveUrl>
+          <divStyle>width:750;height:500px;</divStyle>
+        </hudson.plugins.view.dashboard.core.IframePortlet>
+        <hudson.plugins.view.dashboard.core.IframePortlet>
+          <id>dashboard_portlet_11403</id>
+          <name>Iframe Portlet</name>
+          <iframeSource>http://localhost:8081/job/ior/plot/mdtest/getPlot?index=1&amp;width=750&amp;height=450</iframeSource>
+          <effectiveUrl>http://localhost:8081/job/ior/plot/mdtest/getPlot?index=1&amp;width=750&amp;height=450</effectiveUrl>
+          <divStyle>width:750;height:500px;</divStyle>
+        </hudson.plugins.view.dashboard.core.IframePortlet>
+        <hudson.plugins.view.dashboard.core.IframePortlet>
+          <id>dashboard_portlet_8762</id>
+          <name>Iframe Portlet</name>
+          <iframeSource>http://localhost:8081/job/ior/plot/mdtest/getPlot?index=2&amp;width=750&amp;height=450</iframeSource>
+          <effectiveUrl>http://localhost:8081/job/ior/plot/mdtest/getPlot?index=2&amp;width=750&amp;height=450</effectiveUrl>
+          <divStyle>width:750;height:500px;</divStyle>
+        </hudson.plugins.view.dashboard.core.IframePortlet>
+      </topPortlets>
+      <bottomPortlets>
+        <hudson.plugins.view.dashboard.stats.StatBuilds>
+          <id>dashboard_portlet_28690</id>
+          <name>Build statistics</name>
+        </hudson.plugins.view.dashboard.stats.StatBuilds>
+      </bottomPortlets>
+    </hudson.plugins.view.dashboard.Dashboard>
+  </views>
+  <primaryView>all</primaryView>
+  <slaveAgentPort>-1</slaveAgentPort>
+  <label></label>
+  <crumbIssuer class="hudson.security.csrf.DefaultCrumbIssuer">
+    <excludeClientIPFromCrumb>false</excludeClientIPFromCrumb>
+  </crumbIssuer>
+  <nodeProperties/>
+  <globalNodeProperties/>
+</hudson>
