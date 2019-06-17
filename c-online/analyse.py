@@ -19,9 +19,13 @@ if __name__ == "__main__":
         reader = csv.reader(csvfile)
         corrects = filter(lambda x:x[3] == 'Solution Correct' and x[2] == task, reader)
         times = np.fromiter((x[4] for x in corrects),dtype = int)
+        print(times)
 
         fig1,ax1 = plt.subplots()
         ax1.boxplot(times)
+        ax1.set_ylabel("seconds")
+        ax1.xaxis.set_ticklabels([])
+        ax1.xaxis.set_visible(False)
         plt.savefig("test.png")
 
         mean = np.mean(times)

@@ -9,7 +9,7 @@ def rand_time():
 
 def makerow(userID,topic,task):
     event_list = ["Compile Success","Compile Fail","Solution Correct","Solution Incorrect"]
-    event = choices(event_list,weights= [10,90,5,45])[0]
+    event = choices(event_list,weights= [10,50,10,50])[0]
     data = ""
     if event == event_list[0]:
         if random() > 0.2:
