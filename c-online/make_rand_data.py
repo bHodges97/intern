@@ -2,16 +2,13 @@ import os
 import csv
 from random import *
 
-header = ["UserID","Task","Event","Data"]
+header = ["UserID","Topic","Task","Event","Data"]
 
 def rand_time():
     return str(round(normalvariate(300,20)))
 
-def makerow():
+def makerow(userID,topic,task):
     event_list = ["Compile Success","Compile Fail","Solution Correct","Solution Incorrect"]
-
-    userID = randrange(200)
-    task = str(randrange(1,8)) + "-" + str(randrange(1,8)) + "-" + str(randrange(1,108))
     event = choices(event_list,weights= [10,90,5,45])[0]
     data = ""
     if event == event_list[0]:
@@ -22,12 +19,21 @@ def makerow():
     else:
         data= rand_time()
 
-    row = [userID, task, event, data]
+    row = [userID, topic, task, event, data]
     return row
 
 
 with open('test.csv',  'w') as csvfile:
     writer = csv.writer(csvfile)
     #writer.writerow(header)
-    for i in range(100000):
-        writer.writerow(makerow())
+
+    #fake 200 users
+    users = set()
+    while len(users) < 200:
+        users.add(randrange(10000))
+    for user in users:
+        for i in range(randrange(12)):
+            tasks = {randrange(108) for i in range(randrange(10))}
+            for task in tasks:
+                row = makerow(user,task%7,task)
+                writer.writerow(row)
