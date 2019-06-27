@@ -1,9 +1,6 @@
 # Jenkins Performance Regression Monitor
 
-Plugins required:
-* Dashboard view
-* Performance plugin
-* Plot plugin
-* XUnit plugin
-
-config.xml contains the dashboard configuration.
+Build Image:
+docker build --tag jenkins-monitor/jenkins docker
+Run:
+docker run -p 8080:8080 -p 50000:50000 jenkins-monitor/jenkins
