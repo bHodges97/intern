@@ -1,7 +1,7 @@
-<?xml version='1.1' encoding='UTF-8'?>
+<?xml version="1.1" encoding="UTF-8"?>
 <project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.10.0">
@@ -32,6 +32,9 @@
 ./configure
 make
 ./testing/basic-tests.sh
+wget https://raw.githubusercontent.com/bHodges97/jenkins-monitor/master/scripts/ior/benchmark_ior.sh
+wget https://raw.githubusercontent.com/bHodges97/jenkins-monitor/master/scripts/ior/benchmark_mdtest.sh
+chmod u+x benchmark_*
 ./benchmark_ior.sh
 ./benchmark_mdtest.sh</command>
     </hudson.tasks.Shell>
@@ -45,16 +48,16 @@ make
           <series>
             <hudson.plugins.plot.CSVSeries>
               <file>benchmark_ior.csv</file>
-              <label></label>
+              <label/>
               <fileType>csv</fileType>
               <inclusionFlag>OFF</inclusionFlag>
-              <exclusionValues></exclusionValues>
-              <url></url>
+              <exclusionValues/>
+              <url/>
               <displayTableFlag>false</displayTableFlag>
             </hudson.plugins.plot.CSVSeries>
           </series>
           <group>ior</group>
-          <numBuilds></numBuilds>
+          <numBuilds/>
           <csvFileName>plot-4747633465495449503.csv</csvFileName>
           <csvLastModification>0</csvLastModification>
           <style>line</style>
@@ -62,8 +65,8 @@ make
           <keepRecords>false</keepRecords>
           <exclZero>false</exclZero>
           <logarithmic>false</logarithmic>
-          <yaxisMinimum></yaxisMinimum>
-          <yaxisMaximum></yaxisMaximum>
+          <yaxisMinimum/>
+          <yaxisMaximum/>
         </hudson.plugins.plot.Plot>
         <hudson.plugins.plot.Plot>
           <title>Directory Rates</title>
@@ -71,16 +74,16 @@ make
           <series>
             <hudson.plugins.plot.CSVSeries>
               <file>benchmark_mdtest_directory.csv</file>
-              <label></label>
+              <label/>
               <fileType>csv</fileType>
               <inclusionFlag>OFF</inclusionFlag>
-              <exclusionValues></exclusionValues>
-              <url></url>
+              <exclusionValues/>
+              <url/>
               <displayTableFlag>false</displayTableFlag>
             </hudson.plugins.plot.CSVSeries>
           </series>
           <group>mdtest</group>
-          <numBuilds></numBuilds>
+          <numBuilds/>
           <csvFileName>plot-16228527026025130004.csv</csvFileName>
           <csvLastModification>0</csvLastModification>
           <style>line</style>
@@ -88,8 +91,8 @@ make
           <keepRecords>false</keepRecords>
           <exclZero>false</exclZero>
           <logarithmic>false</logarithmic>
-          <yaxisMinimum></yaxisMinimum>
-          <yaxisMaximum></yaxisMaximum>
+          <yaxisMinimum/>
+          <yaxisMaximum/>
         </hudson.plugins.plot.Plot>
         <hudson.plugins.plot.Plot>
           <title>File Rates</title>
@@ -97,16 +100,16 @@ make
           <series>
             <hudson.plugins.plot.CSVSeries>
               <file>benchmark_mdtest_file.csv</file>
-              <label></label>
+              <label/>
               <fileType>csv</fileType>
               <inclusionFlag>OFF</inclusionFlag>
-              <exclusionValues></exclusionValues>
-              <url></url>
+              <exclusionValues/>
+              <url/>
               <displayTableFlag>false</displayTableFlag>
             </hudson.plugins.plot.CSVSeries>
           </series>
           <group>mdtest</group>
-          <numBuilds></numBuilds>
+          <numBuilds/>
           <csvFileName>plot-17275327126809348752.csv</csvFileName>
           <csvLastModification>0</csvLastModification>
           <style>line</style>
@@ -114,8 +117,8 @@ make
           <keepRecords>false</keepRecords>
           <exclZero>false</exclZero>
           <logarithmic>false</logarithmic>
-          <yaxisMinimum></yaxisMinimum>
-          <yaxisMaximum></yaxisMaximum>
+          <yaxisMinimum/>
+          <yaxisMaximum/>
         </hudson.plugins.plot.Plot>
         <hudson.plugins.plot.Plot>
           <title>Tree Rates</title>
@@ -123,16 +126,16 @@ make
           <series>
             <hudson.plugins.plot.CSVSeries>
               <file>benchmark_mdtest_tree.csv</file>
-              <label></label>
+              <label/>
               <fileType>csv</fileType>
               <inclusionFlag>OFF</inclusionFlag>
-              <exclusionValues></exclusionValues>
-              <url></url>
+              <exclusionValues/>
+              <url/>
               <displayTableFlag>false</displayTableFlag>
             </hudson.plugins.plot.CSVSeries>
           </series>
           <group>mdtest</group>
-          <numBuilds></numBuilds>
+          <numBuilds/>
           <csvFileName>plot-13254075975338870038.csv</csvFileName>
           <csvLastModification>0</csvLastModification>
           <style>line</style>
@@ -140,8 +143,8 @@ make
           <keepRecords>false</keepRecords>
           <exclZero>false</exclZero>
           <logarithmic>false</logarithmic>
-          <yaxisMinimum></yaxisMinimum>
-          <yaxisMaximum></yaxisMaximum>
+          <yaxisMinimum/>
+          <yaxisMaximum/>
         </hudson.plugins.plot.Plot>
       </plots>
     </hudson.plugins.plot.PlotPublisher>
